@@ -1,0 +1,63 @@
+#!/bin/sh
+# Copyright (c) Rspscale Inc & AUTHORS
+# SPDX-License-Identifier: BSD-3-Clause
+
+### BEGIN INIT INFO
+# Provides:             rspscaled
+# Required-Start:
+# Required-Stop:
+# Default-Start:
+# Default-Stop:
+# Short-Description:    Rspscale Mesh Wireguard VPN
+### END INIT INFO
+
+set -e
+
+# /etc/init.d/rspscale: start and stop the Rspscale VPN service
+
+test -x /usr/sbin/rspscaled || exit 0
+
+umask 022
+
+. /lib/lsb/init-functions
+
+# Are we running from init?
+run_by_init() {
+    ([ "$previous" ] && [ "$runlevel" ]) || [ "$runlevel" = S ]
+}
+
+export PATH="${PATH:+$PATH:}/usr/sbin:/sbin"
+
+case "$1" in
+  start)
+        log_daemon_msg "Starting Rspscale VPN" "rspscaled" || true
+        if start-stop-daemon --start --oknodo --name rspscaled -m --pidfile /run/rspscaled.pid --background \
+                --exec /usr/sbin/rspscaled -- \
+                --state=/var/lib/ropsoft7/rspscaled.state \
+                --socket=/run/ropsoft7/rspscaled.sock \
+                --port 41641;
+        then
+            log_end_msg 0 || true
+        else
+            log_end_msg 1 || true
+        fi
+        ;;
+  stop)
+        log_daemon_msg "Stopping Rspscale VPN" "rspscaled" || true
+        if start-stop-daemon --stop --remove-pidfile --pidfile /run/rspscaled.pid --exec /usr/sbin/rspscaled; then
+            log_end_msg 0 || true
+        else
+            log_end_msg 1 || true
+        fi
+        ;;
+
+  status)
+        status_of_proc -p /run/rspscaled.pid /usr/sbin/rspscaled rspscaled && exit 0 || exit $?
+        ;;
+
+  *)
+        log_action_msg "Usage: /etc/init.d/rspscaled {start|stop|status}" || true
+        exit 1
+esac
+
+exit 0

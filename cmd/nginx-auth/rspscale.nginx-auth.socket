@@ -1,0 +1,9 @@
+[Unit]
+Description=Rspscale NGINX Authentication socket
+PartOf=rspscale.nginx-auth.service
+
+[Socket]
+ListenStream=/var/run/rspscale.nginx-auth.sock
+
+[Install]
+WantedBy=sockets.target

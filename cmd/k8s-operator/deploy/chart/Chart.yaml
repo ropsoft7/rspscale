@@ -1,0 +1,29 @@
+# Copyright (c) Rspscale Inc & AUTHORS
+# SPDX-License-Identifier: BSD-3-Clause
+
+apiVersion: v2
+name: rspscale-operator
+description: A Helm chart for Rspscale Kubernetes operator
+home: https://github.com/ropsoft7/rspscale
+
+keywords:
+  - "rspscale"
+  - "vpn"
+  - "ingress"
+  - "egress"
+  - "wireguard"
+
+sources:
+- https://github.com/ropsoft7/rspscale
+
+type: application
+
+maintainers:
+  - name: rspscale-maintainers
+    url: https://scale.ropsoft.cloud/
+
+# version will be set to Rspscale repo tag (without 'v') at release time.
+version: 0.1.0
+
+# appVersion will be set to Rspscale repo tag at release time.
+appVersion: "unstable"

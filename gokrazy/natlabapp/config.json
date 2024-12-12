@@ -1,0 +1,27 @@
+{
+    "Hostname": "natlabapp",
+    "Update": {
+        "NoPassword": true
+    },
+    "SerialConsole": "ttyS0,115200",
+    "GokrazyPackages": [
+        "github.com/gokrazy/gokrazy/cmd/dhcp"
+    ],
+    "Packages": [
+        "github.com/gokrazy/serial-busybox",
+        "scale.ropsoft.cloud/cmd/rspscale",
+        "scale.ropsoft.cloud/cmd/rspscaled",
+        "scale.ropsoft.cloud/cmd/tta"
+    ],
+    "PackageConfig": {
+        "scale.ropsoft.cloud/cmd/rspscale": {
+            "ExtraFilePaths": {
+                "/usr": "usr-dir"
+            }
+        }
+    },
+    "KernelPackage": "github.com/tailscale/gokrazy-kernel",
+    "FirmwarePackage": "",
+    "EEPROMPackage": "",
+    "InternalCompatibilityFlags": {}
+}

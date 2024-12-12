@@ -1,0 +1,6 @@
+apiVersion: scale.ropsoft.cloud/v1alpha1
+kind: Recorder
+metadata:
+  name: recorder
+spec:
+  enableUI: true

@@ -1,0 +1,6 @@
+apiVersion: scale.ropsoft.cloud/v1alpha1
+kind: DNSConfig 
+metadata:
+  name: ts-dns
+spec:
+  nameserver: {}

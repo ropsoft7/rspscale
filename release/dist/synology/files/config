@@ -1,0 +1,11 @@
+{
+	".url": {
+		"SYNO.SDS.Rspscale": {
+			"type": "url",
+			"title": "Rspscale",
+			"icon": "PACKAGE_ICON_256.PNG",
+			"url": "webman/3rdparty/Rspscale/index.cgi/",
+			"urlTarget": "_syno_rspscale"
+		}
+	}
+}

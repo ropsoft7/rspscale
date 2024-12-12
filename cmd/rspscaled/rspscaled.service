@@ -1,0 +1,23 @@
+[Unit]
+Description=Rspscale node agent
+Documentation=https://scale.ropsoft.cloud/kb/
+Wants=network-pre.target
+After=network-pre.target NetworkManager.service systemd-resolved.service
+
+[Service]
+EnvironmentFile=/etc/default/rspscaled
+ExecStart=/usr/sbin/rspscaled --state=/var/lib/ropsoft7/rspscaled.state --socket=/run/ropsoft7/rspscaled.sock --port=${PORT} $FLAGS
+ExecStopPost=/usr/sbin/rspscaled --cleanup
+
+Restart=on-failure
+
+RuntimeDirectory=rspscale
+RuntimeDirectoryMode=0755
+StateDirectory=rspscale
+StateDirectoryMode=0700
+CacheDirectory=rspscale
+CacheDirectoryMode=0750
+Type=notify
+
+[Install]
+WantedBy=multi-user.target

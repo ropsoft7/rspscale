@@ -1,0 +1,33 @@
+{
+    "Hostname": "tsapp",
+    "Update": {
+        "NoPassword": true
+    },
+    "SerialConsole": "ttyS0,115200",
+    "GokrazyPackages": [
+        "github.com/gokrazy/gokrazy/cmd/dhcp",
+        "github.com/gokrazy/gokrazy/cmd/randomd",
+        "github.com/gokrazy/gokrazy/cmd/ntp"
+    ],
+    "Packages": [
+        "github.com/gokrazy/serial-busybox",
+        "github.com/gokrazy/breakglass",
+        "scale.ropsoft.cloud/cmd/rspscale",
+        "scale.ropsoft.cloud/cmd/rspscaled"
+    ],
+    "PackageConfig": {
+        "github.com/gokrazy/breakglass": {
+            "CommandLineFlags": [
+                "-authorized_keys=ec2"
+            ]
+        },
+        "scale.ropsoft.cloud/cmd/rspscale": {
+            "ExtraFilePaths": {
+                "/usr": "usr-dir"
+            }
+        }
+    },
+    "KernelPackage": "github.com/tailscale/gokrazy-kernel",
+    "FirmwarePackage": "github.com/tailscale/gokrazy-kernel",
+    "InternalCompatibilityFlags": {}
+}

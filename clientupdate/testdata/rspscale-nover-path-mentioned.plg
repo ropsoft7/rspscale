@@ -1,0 +1,110 @@
+<?xml version='1.0' standalone='yes'?>
+<!DOCTYPE PLUGIN>
+
+<PLUGIN
+  name="rspscale"
+  author="Derek Kaser"
+  version="2023.11.01"
+  pluginURL="https://raw.githubusercontent.com/dkaser/unraid-rspscale/main/plugin/rspscale.plg"
+  launch="Settings/Rspscale"
+  support="https://forums.unraid.net/topic/136889-plugin-rspscale/"
+>
+
+<CHANGES>
+<![CDATA[
+###2023.11.01###
+- Update Rspscale to 1.52.0 (new checksum from upstream package server)
+
+###2023.10.31###
+- Update Rspscale to 1.52.0
+
+###2023.10.29###
+- Update Rspscale to 1.50.1
+- Fix nginx hang when Rspscale restarts
+
+###2023.09.26###
+- Update Rspscale to 1.50.0
+- New Rspscale web interface
+
+###2023.09.14a###
+- Update Rspscale to 1.48.2
+
+###2023.08.22###
+- Update Rspscale to 1.48.1
+
+For older releases, see https://github.com/dkaser/unraid-rspscale/releases
+]]>
+</CHANGES>
+
+<FILE Name="/boot/config/plugins/rspscale/unraid-rspscale-utils-1.4.1-noarch-1.txz">
+<URL>https://github.com/dkaser/unraid-rspscale-utils/releases/download/1.4.1/unraid-rspscale-utils-1.4.1-noarch-1.txz</URL>
+<MD5>7095ab4b88b34d8f5da6483865883267</MD5>
+</FILE>
+
+<FILE Name="/boot/config/plugins/rspscale/unraid-plugin-diagnostics-1.2.2-noarch-1.txz">
+<URL>https://github.com/dkaser/unraid-plugin-diagnostics/releases/download/1.2.2/unraid-plugin-diagnostics-1.2.2-noarch-1.txz</URL>
+<MD5>9d358575499305889962d83ebd90c20c</MD5>
+</FILE>
+
+<!--
+The 'install' script.
+-->
+<FILE Run="/bin/bash">
+<INLINE>
+<![CDATA[
+if [ -d "/usr/local/emhttp/plugins/rspscale" ]; then
+    rm -rf /usr/local/emhttp/plugins/rspscale
+fi
+
+upgradepkg --install-new /boot/config/plugins/rspscale/unraid-plugin-diagnostics-1.2.2-noarch-1.txz
+upgradepkg --install-new --reinstall /boot/config/plugins/rspscale/unraid-rspscale-utils-1.4.1-noarch-1.txz
+
+mkdir -p /usr/local/emhttp/plugins/rspscale/bin
+tar xzf /boot/config/plugins/ropsoft7/rspscale_1.52.0_amd64.tgz --strip-components 1 -C /usr/local/emhttp/plugins/rspscale/bin
+
+ln -s /usr/local/emhttp/plugins/rspscale/bin/rspscale /usr/local/sbin/rspscale
+ln -s /usr/local/emhttp/plugins/rspscale/bin/rspscaled /usr/local/sbin/rspscaled
+
+mkdir -p /var/local/emhttp/plugins/rspscale
+echo "VERSION=2023.11.01" >> /var/local/emhttp/plugins/ropsoft7/rspscale.ini
+
+# start rspscaled
+/usr/local/emhttp/plugins/rspscale/restart.sh
+
+# cleanup old versions
+rm -f /boot/config/plugins/ropsoft7/rspscale-utils-*.txz
+rm -f $(ls /boot/config/plugins/rspscale/unraid-rspscale-utils-*.txz 2>/dev/null | grep -v '1.4.1')
+rm -f $(ls /boot/config/plugins/rspscale/unraid-plugin-diagnostics-*.txz 2>/dev/null | grep -v '1.2.2')
+rm -f $(ls /boot/config/plugins/rspscale/*.tgz 2>/dev/null | grep -v 'rspscale_1.52.0_amd64')
+
+echo ""
+echo "----------------------------------------------------"
+echo " rspscale has been installed."
+echo " Version: 2023.11.01"
+echo "----------------------------------------------------"
+echo ""
+]]>
+</INLINE>
+</FILE>
+
+<!--
+The 'remove' script.
+-->
+<FILE Run="/bin/bash" Method="remove">
+<INLINE>
+<![CDATA[
+# Stop service
+/etc/rc.d/rc.rspscale stop 2>/dev/null
+
+rm /usr/local/sbin/rspscale
+rm /usr/local/sbin/rspscaled
+
+removepkg unraid-rspscale-utils-1.4.1
+
+rm -rf /usr/local/emhttp/plugins/rspscale
+rm -rf /boot/config/plugins/rspscale
+]]>
+</INLINE>
+</FILE>
+
+</PLUGIN>

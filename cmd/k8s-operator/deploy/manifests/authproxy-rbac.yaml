@@ -1,0 +1,24 @@
+# Copyright (c) Rspscale Inc & AUTHORS
+# SPDX-License-Identifier: BSD-3-Clause
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: rspscale-auth-proxy
+rules:
+- apiGroups: [""]
+  resources: ["users", "groups"]
+  verbs: ["impersonate"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: rspscale-auth-proxy
+subjects:
+- kind: ServiceAccount
+  name: operator
+  namespace: rspscale
+roleRef:
+  kind: ClusterRole
+  name: rspscale-auth-proxy
+  apiGroup: rbac.authorization.k8s.io

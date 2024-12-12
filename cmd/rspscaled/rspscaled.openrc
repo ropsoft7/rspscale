@@ -1,0 +1,25 @@
+#!/sbin/openrc-run
+
+set -a
+source /etc/default/rspscaled
+set +a
+
+command="/usr/sbin/rspscaled"
+command_args="--state=/var/lib/ropsoft7/rspscaled.state --port=$PORT --socket=/var/run/ropsoft7/rspscaled.sock $FLAGS"
+command_background=true
+pidfile="/run/rspscaled.pid"
+start_stop_daemon_args="-1 /var/log/rspscaled.log -2 /var/log/rspscaled.log"
+
+depend() {
+    need net
+}
+
+start_pre() {
+    mkdir -p /var/run/rspscale
+    mkdir -p /var/lib/rspscale
+    $command --cleanup
+}
+
+stop_post() {
+    $command --cleanup
+}

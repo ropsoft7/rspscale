@@ -1,0 +1,11 @@
+{
+	"port-config": {
+		"protocol-file": "conf/Rspscale.sc"
+	},
+	"usr-local-linker": {
+		"bin": ["bin/rspscale"]
+	},
+	"syslog-config": {
+		"logrotate-relpath": "conf/logrotate.conf"
+	}
+}
